@@ -64,6 +64,21 @@
             font-weight: bold;
             color: #007bff;
         }
+
+        .daily-tip {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            color: #555;
+        }
+
+        .tip-title {
+            font-weight: bold;
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -74,6 +89,7 @@
         <button onclick="calculateBedtime()">Calculer</button>
         <div class="results" id="results"></div>
         <div class="cycle-counter" id="cycleCounter"></div>
+        <div class="daily-tip" id="dailyTip"></div>
     </div>
 
     <script>
@@ -146,7 +162,26 @@
 
             document.getElementById("cycleCounter").innerText = message;
         }
+
+        function displayDailyTip() {
+            const tips = [
+                "Un adulte moyen a besoin de 7 à 9 heures de sommeil par nuit.",
+                "Un cycle de sommeil complet dure environ 90 minutes.",
+                "Le sommeil est essentiel pour la consolidation de la mémoire.",
+                "Évitez les écrans au moins 30 minutes avant de dormir pour un meilleur sommeil.",
+                "Un environnement sombre et frais favorise un meilleur sommeil.",
+                "Faire de l'exercice régulièrement peut améliorer la qualité de votre sommeil.",
+                "Le sommeil régule les hormones qui affectent l'appétit, aidant ainsi à maintenir un poids sain.",
+            ];
+
+            const today = new Date().getDay();
+            const tip = tips[today % tips.length];
+
+            document.getElementById("dailyTip").innerHTML = `<span class="tip-title">Conseil du jour :</span> ${tip}`;
+        }
+
+        // Afficher le conseil du jour dès le chargement de la page
+        window.onload = displayDailyTip;
     </script>
 </body>
 </html>
-
