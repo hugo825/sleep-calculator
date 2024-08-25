@@ -28,7 +28,8 @@
             color: #333;
         }
 
-        input[type="time"] {
+        input[type="time"],
+        input[type="text"] {
             padding: 10px;
             margin-bottom: 20px;
             font-size: 16px;
@@ -84,19 +85,46 @@
 <body>
     <div class="container">
         <h1>Heure idéale de coucher</h1>
+        <label for="username">Nom d'utilisateur :</label><br>
+        <input type="text" id="username" placeholder="Entrez votre nom d'utilisateur" required><br>
+        <button onclick="createAccount()">Créer un compte</button><br>
+        
         <label for="wakeTime">Heure de lever :</label><br>
         <input type="time" id="wakeTime" required><br>
+        <button onclick="saveWakeTime()">Enregistrer l'heure de lever</button>
         <button onclick="calculateBedtime()">Calculer</button>
+        
         <div class="results" id="results"></div>
         <div class="cycle-counter" id="cycleCounter"></div>
         <div class="daily-tip" id="dailyTip"></div>
     </div>
 
     <script>
-        function calculateBedtime() {
+        function createAccount() {
+            const username = document.getElementById("username").value;
+            if (username) {
+                localStorage.setItem("username", username);
+                alert(`Compte créé avec succès pour ${username}`);
+                loadUserData();
+            } else {
+                alert("Veuillez entrer un nom d'utilisateur.");
+            }
+        }
+
+        function saveWakeTime() {
             const wakeTime = document.getElementById("wakeTime").value;
-            if (!wakeTime) {
+            if (wakeTime) {
+                localStorage.setItem("wakeTime", wakeTime);
+                alert("Heure de lever enregistrée avec succès.");
+            } else {
                 alert("Veuillez entrer une heure de lever.");
+            }
+        }
+
+        function calculateBedtime() {
+            const wakeTime = document.getElementById("wakeTime").value || localStorage.getItem("wakeTime");
+            if (!wakeTime) {
+                alert("Veuillez entrer ou enregistrer une heure de lever.");
                 return;
             }
 
@@ -179,6 +207,29 @@
 
             document.getElementById("dailyTip").innerHTML = `<span class="tip-title">Conseil du jour :</span> ${tip}`;
         }
+
+        function loadUserData() {
+            const username = localStorage.getItem("username");
+            const wakeTime = localStorage.getItem("wakeTime");
+
+            if (username) {
+                document.getElementById("username").value = username;
+            }
+
+            if (wakeTime) {
+                document.getElementById("wakeTime").value = wakeTime;
+            }
+        }
+
+        // Afficher le conseil du jour dès le chargement de la page et charger les données utilisateur
+        window.onload = function() {
+            displayDailyTip();
+            loadUserData();
+        };
+    </script>
+</body>
+</html>
+
 
         // Afficher le conseil du jour dès le chargement de la page
         window.onload = displayDailyTip;
