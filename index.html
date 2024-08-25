@@ -28,8 +28,7 @@
             color: #333;
         }
 
-        input[type="time"],
-        input[type="text"] {
+        input[type="time"] {
             padding: 10px;
             margin-bottom: 20px;
             font-size: 16px;
@@ -85,154 +84,16 @@
 <body>
     <div class="container">
         <h1>Heure idéale de coucher</h1>
-        <label for="username">Nom d'utilisateur :</label><br>
-        <input type="text" id="username" placeholder="Entrez votre nom d'utilisateur" required><br>
-        <button onclick="createAccount()">Créer un compte</button><br>
-        
         <label for="wakeTime">Heure de lever :</label><br>
         <input type="time" id="wakeTime" required><br>
-        <button onclick="saveWakeTime()">Enregistrer l'heure de lever</button>
         <button onclick="calculateBedtime()">Calculer</button>
-        
         <div class="results" id="results"></div>
         <div class="cycle-counter" id="cycleCounter"></div>
         <div class="daily-tip" id="dailyTip"></div>
     </div>
 
     <script>
-        function createAccount() {
-            const username = document.getElementById("username").value;
-            if (username) {
-                localStorage.setItem("username", username);
-                alert(`Compte créé avec succès pour ${username}`);
-                loadUserData();
-            } else {
-                alert("Veuillez entrer un nom d'utilisateur.");
-            }
-        }
-
-        function saveWakeTime() {
-            const wakeTime = document.getElementById("wakeTime").value;
-            if (wakeTime) {
-                localStorage.setItem("wakeTime", wakeTime);
-                alert("Heure de lever enregistrée avec succès.");
-            } else {
-                alert("Veuillez entrer une heure de lever.");
-            }
-        }
-
         function calculateBedtime() {
-            const wakeTime = document.getElementById("wakeTime").value || localStorage.getItem("wakeTime");
+            const wakeTime = document.getElementById("wakeTime").value;
             if (!wakeTime) {
-                alert("Veuillez entrer ou enregistrer une heure de lever.");
-                return;
-            }
-
-            const wakeHour = parseInt(wakeTime.split(":")[0]);
-            const wakeMinute = parseInt(wakeTime.split(":")[1]);
-
-            const cycles = 6; // nombre de cycles de sommeil (6 cycles de 90 minutes = 9 heures de sommeil)
-            const cycleDuration = 90; // durée d'un cycle en minutes
-            const recommendedCycles = 5; // cycle recommandé (7h30 de sommeil)
-
-            let results = "";
-            for (let i = cycles; i > 0; i--) {
-                let totalSleepMinutes = i * cycleDuration;
-                let bedtimeHour = wakeHour - Math.floor(totalSleepMinutes / 60);
-                let bedtimeMinute = wakeMinute - (totalSleepMinutes % 60);
-
-                if (bedtimeMinute < 0) {
-                    bedtimeMinute += 60;
-                    bedtimeHour -= 1;
-                }
-
-                if (bedtimeHour < 0) {
-                    bedtimeHour += 24;
-                }
-
-                results += `<p>Pour ${i} cycles, l'heure idéale de coucher est : ${formatTime(bedtimeHour, bedtimeMinute)}`;
-                
-                if (i === recommendedCycles) {
-                    results += ` <span class="recommended">(Recommandé)</span>`;
-                }
-
-                results += `</p>`;
-            }
-
-            document.getElementById("results").innerHTML = results;
-
-            // Calcul du nombre de cycles de sommeil que vous pouvez obtenir si vous vous couchez maintenant
-            calculateSleepCycles(wakeHour, wakeMinute, cycleDuration);
-        }
-
-        function formatTime(hour, minute) {
-            return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-        }
-
-        function calculateSleepCycles(wakeHour, wakeMinute, cycleDuration) {
-            const now = new Date();
-            const wakeTime = new Date();
-            wakeTime.setHours(wakeHour);
-            wakeTime.setMinutes(wakeMinute);
-
-            const timeDifference = (wakeTime - now) / (1000 * 60); // différence en minutes
-            const cycles = Math.floor(timeDifference / cycleDuration);
-
-            let message = "";
-            if (cycles > 0) {
-                message = `Si vous vous couchez maintenant, vous pouvez obtenir ${cycles} ${cycles > 1 ? "cycles" : "cycle"} de sommeil complet.`;
-                if (cycles < 5) {
-                    message += " Notez que cela est inférieur au nombre recommandé de 5 cycles pour un sommeil optimal.";
-                }
-            } else {
-                message = "Il ne reste pas suffisamment de temps pour un cycle de sommeil complet avant votre heure de lever.";
-            }
-
-            document.getElementById("cycleCounter").innerText = message;
-        }
-
-        function displayDailyTip() {
-            const tips = [
-                "Un adulte moyen a besoin de 7 à 9 heures de sommeil par nuit.",
-                "Un cycle de sommeil complet dure environ 90 minutes.",
-                "Le sommeil est essentiel pour la consolidation de la mémoire.",
-                "Évitez les écrans au moins 30 minutes avant de dormir pour un meilleur sommeil.",
-                "Un environnement sombre et frais favorise un meilleur sommeil.",
-                "Faire de l'exercice régulièrement peut améliorer la qualité de votre sommeil.",
-                "Le sommeil régule les hormones qui affectent l'appétit, aidant ainsi à maintenir un poids sain.",
-            ];
-
-            const today = new Date().getDay();
-            const tip = tips[today % tips.length];
-
-            document.getElementById("dailyTip").innerHTML = `<span class="tip-title">Conseil du jour :</span> ${tip}`;
-        }
-
-        function loadUserData() {
-            const username = localStorage.getItem("username");
-            const wakeTime = localStorage.getItem("wakeTime");
-
-            if (username) {
-                document.getElementById("username").value = username;
-            }
-
-            if (wakeTime) {
-                document.getElementById("wakeTime").value = wakeTime;
-            }
-        }
-
-        // Afficher le conseil du jour dès le chargement de la page et charger les données utilisateur
-        window.onload = function() {
-            displayDailyTip();
-            loadUserData();
-        };
-    </script>
-</body>
-</html>
-
-
-        // Afficher le conseil du jour dès le chargement de la page
-        window.onload = displayDailyTip;
-    </script>
-</body>
-</html>
+                alert
