@@ -59,6 +59,11 @@
             font-size: 18px;
             color: #333;
         }
+
+        .recommended {
+            font-weight: bold;
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -84,6 +89,7 @@
 
             const cycles = 6; // nombre de cycles de sommeil (6 cycles de 90 minutes = 9 heures de sommeil)
             const cycleDuration = 90; // durée d'un cycle en minutes
+            const recommendedCycles = 5; // cycle recommandé (7h30 de sommeil)
 
             let results = "";
             for (let i = cycles; i > 0; i--) {
@@ -100,7 +106,13 @@
                     bedtimeHour += 24;
                 }
 
-                results += `<p>Pour ${i} cycles, l'heure idéale de coucher est : ${formatTime(bedtimeHour, bedtimeMinute)}</p>`;
+                results += `<p>Pour ${i} cycles, l'heure idéale de coucher est : ${formatTime(bedtimeHour, bedtimeMinute)}`;
+                
+                if (i === recommendedCycles) {
+                    results += ` <span class="recommended">(Recommandé)</span>`;
+                }
+
+                results += `</p>`;
             }
 
             document.getElementById("results").innerHTML = results;
@@ -134,3 +146,4 @@
     </script>
 </body>
 </html>
+
