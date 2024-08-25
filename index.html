@@ -48,25 +48,13 @@
             background-color: #0056b3;
         }
 
-        .results {
+        .results, .cycle-counter, .recommended, .daily-tip, .music-container, .breathing-exercise {
             margin-top: 20px;
             font-size: 18px;
             color: #333;
-        }
-
-        .cycle-counter {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .recommended {
-            font-weight: bold;
-            color: #007bff;
         }
 
         .daily-tip {
-            margin-top: 30px;
             padding: 20px;
             background-color: #f9f9f9;
             border-radius: 10px;
@@ -79,6 +67,17 @@
             font-weight: bold;
             color: #007bff;
         }
+
+        .music-container {
+            margin-top: 20px;
+        }
+
+        .breathing-exercise {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #007bff;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -90,10 +89,58 @@
         <div class="results" id="results"></div>
         <div class="cycle-counter" id="cycleCounter"></div>
         <div class="daily-tip" id="dailyTip"></div>
+        <div class="music-container">
+            <h2>Musique Relaxante</h2>
+            <audio controls>
+                <source src="votre-musique-relaxante.mp3" type="audio/mpeg">
+                Votre navigateur ne supporte pas l'élément audio.
+            </audio>
+        </div>
+        <div class="breathing-exercise">
+            <h2>Exercice de Respiration</h2>
+            <p>Essayez cette technique de respiration pour vous détendre avant de dormir :</p>
+            <p>Inspirez profondément pendant 4 secondes, retenez votre souffle pendant 7 secondes, puis expirez lentement pendant 8 secondes. Répétez 4 à 5 fois.</p>
+        </div>
     </div>
 
     <script>
         function calculateBedtime() {
             const wakeTime = document.getElementById("wakeTime").value;
             if (!wakeTime) {
-                alert
+                alert("Veuillez entrer une heure de lever valide.");
+                return;
+            }
+
+            const wakeTimeParts = wakeTime.split(':');
+            const wakeHour = parseInt(wakeTimeParts[0]);
+            const wakeMinute = parseInt(wakeTimeParts[1]);
+
+            const sleepCycles = 6;
+            const cycleDuration = 90; // 1 cycle de sommeil dure environ 90 minutes
+
+            let bedTimes = [];
+            for (let i = 1; i <= sleepCycles; i++) {
+                let totalMinutes = (wakeHour * 60 + wakeMinute) - (i * cycleDuration);
+                let bedtimeHour = Math.floor(totalMinutes / 60);
+                let bedtimeMinute = totalMinutes % 60;
+
+                if (bedtimeMinute < 0) {
+                    bedtimeMinute += 60;
+                    bedtimeHour--;
+                }
+
+                if (bedtimeHour < 0) {
+                    bedtimeHour += 24;
+                }
+
+                let bedtimeFormatted = ("0" + bedtimeHour).slice(-2) + ':' + ("0" + bedtimeMinute).slice(-2);
+                bedTimes.push(bedtimeFormatted);
+            }
+
+            document.getElementById("results").innerHTML = `Les heures de coucher idéales sont : ${bedTimes.join(', ')}`;
+            document.getElementById("cycleCounter").innerHTML = `Vous devriez compléter au moins 5 à 6 cycles de sommeil pour vous sentir bien reposé.`;
+            document.getElementById("dailyTip").innerHTML = `<span class="tip-title">Conseil du jour :</span> Essayez de vous coucher à la même heure chaque nuit pour réguler votre horloge biologique.`;
+        }
+    </script>
+</body>
+</html>
