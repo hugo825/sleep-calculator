@@ -137,6 +137,9 @@
             let message = "";
             if (cycles > 0) {
                 message = `Si vous vous couchez maintenant, vous pouvez obtenir ${cycles} ${cycles > 1 ? "cycles" : "cycle"} de sommeil complet.`;
+                if (cycles < 5) {
+                    message += " Notez que cela est inférieur au nombre recommandé de 5 cycles pour un sommeil optimal.";
+                }
             } else {
                 message = "Il ne reste pas suffisamment de temps pour un cycle de sommeil complet avant votre heure de lever.";
             }
