@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculateur d'heure de coucher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="time"] {
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .cycle-counter {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Heure idéale de coucher</h1>
+        <label for="wakeTime">Heure de lever :</label><br>
+        <input type="time" id="wakeTime" required><br>
+        <button onclick="calculateBedtime()">Calculer</button>
+        <div class="results" id="results"></div>
+        <div class="cycle-counter" id="cycleCounter"></div>
+    </div>
+
+    <script>
+        function calculateBedtime() {
+            const wakeTime = document.getElementById("wakeTime").value;
+            if (!wakeTime) {
+                alert("Veuillez entrer une heure de lever.");
+                return;
+            }
+
+            const wakeHour = parseInt(wakeTime.split(":")[0]);
+            const wakeMinute = parseInt(wakeTime.split(":")[1]);
+
+            const cycles = 6; // nombre de cycles de sommeil (6 cycles de 90 minutes = 9 heures de sommeil)
+            const cycleDuration = 90; // durée d'un cycle en minutes
+
+            let results = "";
+            for (let i = cycles; i > 0; i--) {
+                let totalSleepMinutes = i * cycleDuration;
+                let bedtimeHour = wakeHour - Math.floor(totalSleepMinutes / 60);
+                let bedtimeMinute = wakeMinute - (totalSleepMinutes % 60);
+
+                if (bedtimeMinute < 0) {
+                    bedtimeMinute += 60;
+                    bedtimeHour -= 1;
+                }
+
+                if (bedtimeHour < 0) {
+                    bedtimeHour += 24;
+                }
+
+                results += `<p>Pour ${i} cycles, l'heure idéale de coucher est : ${formatTime(bedtimeHour, bedtimeMinute)}</p>`;
+            }
+
+            document.getElementById("results").innerHTML = results;
+
+            // Calcul du nombre de cycles de sommeil que vous pouvez obtenir si vous vous couchez maintenant
+            calculateSleepCycles(wakeHour, wakeMinute, cycleDuration);
+        }
+
+        function formatTime(hour, minute) {
+            return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        }
+
+        function calculateSleepCycles(wakeHour, wakeMinute, cycleDuration) {
+            const now = new Date();
+            const wakeTime = new Date();
+            wakeTime.setHours(wakeHour);
+            wakeTime.setMinutes(wakeMinute);
+
+            const timeDifference = (wakeTime - now) / (1000 * 60); // différence en minutes
+            const cycles = Math.floor(timeDifference / cycleDuration);
+
+            let message = "";
+            if (cycles > 0) {
+                message = `Si vous vous couchez maintenant, vous pouvez obtenir ${cycles} ${cycles > 1 ? "cycles" : "cycle"} de sommeil complet.`;
+            } else {
+                message = "Il ne reste pas suffisamment de temps pour un cycle de sommeil complet avant votre heure de lever.";
+            }
+
+            document.getElementById("cycleCounter").innerText = message;
+        }
+    </script>
+</body>
+</html>
